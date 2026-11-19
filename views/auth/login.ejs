@@ -1,24 +1,58 @@
-<h1>Sign in</h1>
-<% if (error) { %>
-  <p class="flash flash-error"><%= error %></p>
-<% } %>
+<section class="auth-page" aria-labelledby="login-title">
+  <div class="auth-intro">
+    <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> TRAINER CHECK-IN</p>
+    <h1 id="login-title">Welcome back, Trainer!</h1>
+    <p class="auth-description">Your next adventure is just around the corner. Sign in to return to your world.</p>
+    <div class="auth-art" aria-hidden="true">
+      <div class="auth-orb"><span></span></div>
+      <span class="auth-spark auth-spark-one">✦</span>
+      <span class="auth-spark auth-spark-two">✧</span>
+      <span class="auth-art-caption">READY WHEN YOU ARE</span>
+    </div>
+    <a class="back-link" href="/">← Back to the adventure</a>
+  </div>
 
-<% if (features.localAuth) { %>
-  <form method="post" action="/auth/login">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-    <input type="hidden" name="next" value="<%= next %>" />
-    <label>Username <input name="username" required maxlength="64" /></label>
-    <label>Password <input name="password" type="password" required /></label>
-    <button type="submit">Sign in</button>
-  </form>
-  <p><a href="/auth/register">Create an account</a> · <a href="/auth/forgot">Forgot password</a></p>
-<% } %>
+  <div class="auth-card">
+    <div class="auth-card-heading">
+      <span class="auth-card-icon" aria-hidden="true">★</span>
+      <div>
+        <p class="eyebrow">PLAYER ONE</p>
+        <h2>Sign in</h2>
+      </div>
+    </div>
 
-<div class="auth-providers">
-  <% if (features.formbarAuth) { %>
-    <a class="button" href="/auth/formbar?next=<%= encodeURIComponent(next) %>">Continue with Formbar</a>
-  <% } %>
-  <% if (features.entraAuth) { %>
-    <a class="button" href="/auth/entra?next=<%= encodeURIComponent(next) %>">Continue with Microsoft</a>
-  <% } %>
-</div>
+    <% if (features.localAuth) { %>
+      <form class="login-form" method="post" action="/auth/login">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <input type="hidden" name="next" value="<%= next %>" />
+        <label for="username">Username</label>
+        <input id="username" name="username" autocomplete="username" required maxlength="64" />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+        <button class="button button-primary" type="submit">Continue <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="auth-links">
+        <a href="/auth/register">Create an account</a>
+        <a href="/auth/forgot">Forgot password?</a>
+      </div>
+    <% } %>
+
+    <% if (features.localAuth && (features.formbarAuth || features.entraAuth)) { %>
+      <div class="auth-divider"><span>OR SIGN IN WITH</span></div>
+    <% } %>
+
+    <div class="auth-providers">
+      <% if (features.formbarAuth) { %>
+        <a class="button button-provider" href="/auth/formbar?next=<%= encodeURIComponent(next) %>"><span class="provider-mark" aria-hidden="true">F</span> Continue with Formbar</a>
+      <% } %>
+      <% if (features.entraAuth) { %>
+        <a class="button button-provider" href="/auth/entra?next=<%= encodeURIComponent(next) %>"><span class="provider-mark provider-mark-ms" aria-hidden="true">M</span> Continue with Microsoft</a>
+      <% } %>
+      <% if (!features.localAuth && !features.formbarAuth && !features.entraAuth) { %>
+        <p class="auth-unavailable">Sign-in is not available right now. Please check back soon.</p>
+      <% } %>
+    </div>
+
+    <p class="auth-card-footnote"><span aria-hidden="true">✦</span> Good to see you again.</p>
+  </div>
+</section>
